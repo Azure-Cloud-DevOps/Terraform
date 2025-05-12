@@ -29,5 +29,18 @@
 
 ![image](https://github.com/user-attachments/assets/5d37d132-9e7f-4981-a8fb-6883264e7f7f)
 
+## Terraform.tfvars
+    -It stores variable values
+    -Terraform.tfvars are local configuration files    
+    -Terraform.tfvars is sourced automatically by Terraform at runtime
+    -Variables in Terraform.tfvars are only valid for that particular environment
+    -Terraform.tfvars provides default values for the variables declared in variables.tf
+
+## variables.tf
+    -It stores variable definitions such as data type and possible values
+    -variables.tf files are used to define variables in multiple environment
+    -variables.tf must be specified explicitly when running Terraform commands
+    -variables in variables.tf can be used across environments when defined properly
+    -variables.tf do not provide any default values
 
 
