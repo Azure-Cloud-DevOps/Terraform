@@ -1,18 +1,18 @@
 
 ## what are things mostly we will create using Terraform for Azure CLoud?
 1. Compute Resources
-  •	Virtual Machines (VMs): Provision and manage Windows/Linux virtual machines.
-    Example: azurerm_linux_virtual_machine, azurerm_windows_virtual_machine
-  •	Virtual Machine Scale Sets (VMSS): Automate scaling of VM instances.
-    Example: azurerm_virtual_machine_scale_set
-  •	Azure Kubernetes Service (AKS): Set up and manage Kubernetes clusters for containerized applications.
-    Example: azurerm_kubernetes_cluster
-  •	Azure Functions: Deploy serverless functions for event-driven applications.
-    Example: azurerm_function_app
-  •	App Service Plan: Configure the infrastructure for hosting web applications or APIs.
-    Example: azurerm_app_service_plan
-  •	App Service: Deploy and manage web apps, APIs, or mobile backends.
-    o	Example: azurerm_app_service
+    1) Virtual Machines (VMs): Provision and manage Windows/Linux virtual machines.
+        Example: azurerm_linux_virtual_machine, azurerm_windows_virtual_machine
+    2) Virtual Machine Scale Sets (VMSS): Automate scaling of VM instances.
+        Example: azurerm_virtual_machine_scale_set
+    3) Azure Kubernetes Service (AKS): Set up and manage Kubernetes clusters for containerized applications.
+        Example: azurerm_kubernetes_cluster
+    4) Azure Functions: Deploy serverless functions for event-driven applications.
+        Example: azurerm_function_app
+    5) App Service Plan: Configure the infrastructure for hosting web applications or APIs.
+        Example: azurerm_app_service_plan
+    6) App Service: Deploy and manage web apps, APIs, or mobile backends.
+        Example: azurerm_app_service
 2. Networking
   •	Virtual Networks (VNets): Configure and manage networking in Azure.
     o	Example: azurerm_virtual_network
