@@ -1,0 +1,40 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureServiceConnection: '<Your-Service-Connection-Name>'
+  terraformVersion: '1.5.0'
+
+steps:
+
+- task: UseTerraform@0
+  inputs:
+    terraformVersion: '$(terraformVersion)'
+
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: '$(terraformVersion)'
+
+- script: |
+    terraform init
+  displayName: 'Terraform Init'
+
+- script: |
+    terraform validate
+  displayName: 'Terraform Validate'
+
+- script: |
+    terraform plan -out=tfplan
+  displayName: 'Terraform Plan'
+
+- script: |
+    terraform apply -auto-approve tfplan
+  displayName: 'Terraform Apply'
+  env:
+    ARM_CLIENT_ID: $(servicePrincipalClientId)
+    ARM_CLIENT_SECRET: $(servicePrincipalClientSecret)
+    ARM_SUBSCRIPTION_ID: $(subscriptionId)
+    ARM_TENANT_ID: $(tenantId)
