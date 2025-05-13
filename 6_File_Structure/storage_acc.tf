@@ -9,5 +9,5 @@ resource "azurerm_storage_account" "example" {
   tags = {
     environment = local.common_tags.environment
   }
-
+  depends_on = [ azurerm_resource_group.example ]
 }
