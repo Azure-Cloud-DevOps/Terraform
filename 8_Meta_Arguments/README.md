@@ -1,16 +1,16 @@
 ## count
 ## 🔧 Basic Usage of count:
  # 1. Creating Multiple Azure Resource Groups:
-variable "resource_group_names" {
-  type    = list(string)
-  default = ["rg-dev", "rg-test", "rg-prod"]
-}
-
-resource "azurerm_resource_group" "example" {
-  count    = length(var.resource_group_names)
-  name     = var.resource_group_names[count.index]
-  location = "East US"
-}
+      variable "resource_group_names" {
+        type    = list(string)
+        default = ["rg-dev", "rg-test", "rg-prod"]
+      }
+      
+      resource "azurerm_resource_group" "example" {
+        count    = length(var.resource_group_names)
+        name     = var.resource_group_names[count.index]
+        location = "East US"
+      }
 
 ## 🧠 Advanced Use Cases:
  # 1. Conditional Resource Creation
