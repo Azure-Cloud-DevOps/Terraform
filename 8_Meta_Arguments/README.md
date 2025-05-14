@@ -1,6 +1,6 @@
 ## count
-🔧 Basic Usage of count
-Creating Multiple Azure Resource Groups
+## 🔧 Basic Usage of count:
+ # 1. Creating Multiple Azure Resource Groups:
 variable "resource_group_names" {
   type    = list(string)
   default = ["rg-dev", "rg-test", "rg-prod"]
@@ -12,8 +12,8 @@ resource "azurerm_resource_group" "example" {
   location = "East US"
 }
 
-🧠 Advanced Use Cases
-Conditional Resource Creation
+## 🧠 Advanced Use Cases:
+ # 1. Conditional Resource Creation
 variable "create_storage_account" {
   type    = bool
   default = true
@@ -28,7 +28,7 @@ resource "azurerm_storage_account" "example" {
   account_replication_type = "LRS"
 }
 
-Using count with Modules
+ # 2.Using count with Modules
 module "network" {
   source = "./modules/network"
   count  = 2
@@ -37,7 +37,7 @@ module "network" {
   location            = "East US"
 }
 
-Dynamic Resource Naming
+ # 3.Dynamic Resource Naming
 resource "azurerm_virtual_network" "example" {
   count               = 3
   name                = "vnet-${count.index}"
