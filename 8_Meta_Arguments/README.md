@@ -45,3 +45,24 @@
         location            = "East US"
         resource_group_name = azurerm_resource_group.example.name
       }
+
+# 4.for_each
+      variable "storage_account_name" {
+        type = set(string)
+        default = [ "techtutorials11", "techtutorials12" ]
+      }
+
+      resource "azurerm_storage_account" "example" {
+        #count = length(var.storage_account_name)
+        for_each = var.storage_account_name
+        #name = var.storage_account_name(count.index)
+        name                     = each.value
+        resource_group_name      = azurerm_resource_group.example.name
+        location                 = azurerm_resource_group.example.location
+        account_tier             = "Standard"
+        account_replication_type = "GRS"
+      
+        tags = {
+          environment = "staging"
+        }
+      }
