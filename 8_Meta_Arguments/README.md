@@ -46,7 +46,7 @@
         resource_group_name = azurerm_resource_group.example.name
       }
 
-# 4.for_each
+## for_each
       variable "storage_account_name" {
         type = set(string)
         default = [ "techtutorials11", "techtutorials12" ]
@@ -65,4 +65,13 @@
         tags = {
           environment = "staging"
         }
+      }
+
+## for loop
+      output "rgname" {
+        value = azurerm_resource_group.example[*].name
+      }
+      
+      output "storage_name" {
+        value = [for i in azurerm_storage_account.example: i.name]
       }
