@@ -1,1 +1,3 @@
-Dynamic Expression, Conditional And Splat Expression
+Dynamic Expression, 
+Conditional Expression,
+Splat Expression
