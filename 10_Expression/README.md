@@ -31,26 +31,27 @@
     }
 # Splat Expression
   - Used to extract values from a list of resources or map outputs in a clean way.
-    resource_type.resource_name[*].attribute
-
-    output "public_ips" {
-      value = azurerm_public_ip.example[*].ip_address
-    }
-    
-    output "ip_names" {
-      value = [for ip in azurerm_public_ip.example : ip.name]
-    }
+          resource_type.resource_name[*].attribute
+      
+          output "public_ips" {
+            value = azurerm_public_ip.example[*].ip_address
+          }
+          
+          output "ip_names" {
+            value = [for ip in azurerm_public_ip.example : ip.name]
+          }
 
 //splat
-    output "splat" {
-      value = var.account_names[1]
-     #value = local.nsg_rules[*]
-     #value = local.nsg_rules[*].allow_http.description
-    }
+          output "splat" {
+            value = var.account_names[1]
+           #value = var.account_names[*]
+           #value = local.nsg_rules[*]
+           #value = local.nsg_rules[*].allow_http.description
+          }
 
 /for loop. above one we will splat
-    output "demo" {
-      value = [ for count in local.nsg_rules : count.description ]
-    }
+          output "demo" {
+            value = [ for count in local.nsg_rules : count.description ]
+          }
 
 
