@@ -41,9 +41,11 @@
       value = [for ip in azurerm_public_ip.example : ip.name]
     }
 
+//splat
     output "splat" {
       value = var.account_names[1]
      #value = local.nsg_rules[*]
+     #value = local.nsg_rules[*].allow_http.description
     }
 
 /for loop. above one we will splat
