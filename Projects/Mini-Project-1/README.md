@@ -1,5 +1,6 @@
 # Advanced Azure Infrastructure with Terraform - Hands-on Assignment
 
+![image](https://github.com/user-attachments/assets/e6ff746b-5b4a-419e-9311-065ef240d5a5)
 
 ## Assignment Overview
 You'll create a scalable web application infrastructure in Azure using Terraform. The infrastructure will include a Virtual Machine Scale Set (VMSS) behind a load balancer with proper security and scaling configurations.
