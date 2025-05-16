@@ -16,6 +16,17 @@ variable "subnets" {
   }))
 }
 
-             
+variable "lb_name" {
+  type = string
+}
+
+variable "route_table_name" {
+  type = string
+}
+
+variable "nic_name" {
+  type = string
+}
+
              
           
