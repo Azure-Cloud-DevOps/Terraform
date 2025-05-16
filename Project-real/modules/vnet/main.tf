@@ -19,7 +19,12 @@ resource "azurerm_virtual_network" "vent" {
   location            = var.location
 }
 
-resource "azurerm_subnet" "subnet" {
-  f
+resource "azurerm_subnet" "subnets" {
+  for_each             = var.subnets
+  name                 = each.key
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  adress_prefixes      = [each.value.address_prefix]
+}
 
   
