@@ -18,16 +18,16 @@ resource "azurerm_resource_group" "my-rg" {
 resource "azurerm_virtual_network" "vent" {
   name                = var.vnet_name
   resource_group_name = azurerm_resource_group.my-rg.name
-  address_space       = 10.0.0.0/16 #need to use variable
+  address_space       = [var.address_space]
   location            = var.location
 }
 
 resource "azurerm_subnet" "subnets" {
   for_each             = var.subnets
   name                 = each.key
-  resource_group_name  = var.resource_group_name
+  resource_group_name  = azurerm_resource_group.my-rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  adress_prefixes      = [each.value.address_prefix]
+  address_prefixes      = [each.value.address_prefix]
 }
 
 resource "azurerm_network_security_group" "nsg" {
@@ -52,19 +52,22 @@ resource "azurerm_network_security_rule" "nsg_rules" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "nsg_assoc" {
-  subnet_id                  = azurerm_subnet.subnets.id
+  for_each                   = azurerm_subnet.subnets
+  subnet_id                  = each.value.id
   network_security_group_id  = azurerm_network_security_group.nsg.id
 }
 
 resource "azurerm_network_interface" "nic" {
-  name               = var.nic_name
-  location           = azurerm_resource_group.my-rg.location
-  resoure_group_name = azurerm_resource_group.my-rg.name
+  name                = var.nic_name
+  location            = azurerm_resource_group.my-rg.location
+  resource_group_name = azurerm_resource_group.my-rg.name
 
-  ip_confiuration {
+  ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.subnets.id
+    for_each                      = azurerm_subnet.subnets
+    subnet_id                     = each.value.id
     private_ip_address_allocation = "Dynamic"
+  }
 }
 
 resource "azurerm_route_table" "rt" {
@@ -75,26 +78,27 @@ resource "azurerm_route_table" "rt" {
 
 resource "azurerm_route" "route" {
   name                   = "route-to-internet"
-  resource_group_name    = azurerm_resource_group.rg.name
+  resource_group_name    = azurerm_resource_group.my-rg.name
   route_table_name       = azurerm_route_table.rt.name
   address_prefix         = "0.0.0.0/0"
   next_hop_type          = "Internet"
 }
 
 resource "azurerm_subnet_route_table_association" "route_assoc" {
-  subnet_id      = azurerm_subnet.subnets.id
-  route_table_id = azurerm_route_table.rt.id
+  for_each             = azurerm_subnet.subnets
+  subnet_id            = each.value.id
+  route_table_id       = azurerm_route_table.rt.id
 }
 
 # A public IP address for the load balancer
 resource "azurerm_public_ip" "lb_pip" {
   name                = "${var.lb_name}-pip"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.my-rg.location
+  resource_group_name = azurerm_resource_group.my-rg.name
   allocation_method   = "Static"
   sku                 = "Standard"
   zones               = ["1", "2", "3"]
-  domain_name_label   = "${azurerm_resource_group.rg.name}-${random_pet.lb_hostname.id}"
+  domain_name_label   = "${azurerm_resource_group.my-rg.name}-${random_pet.lb_hostname.id}"
 }
 
 # A load balancer with a frontend IP configuration and a backend address pool
@@ -159,7 +163,8 @@ resource "azurerm_nat_gateway" "example" {
 }
 
 resource "azurerm_subnet_nat_gateway_association" "example" {
-  subnet_id      = azurerm_subnet.subnets.id
+  for_each       = azurerm_subnet.subnets
+  subnet_id      = each.value.id
   nat_gateway_id = azurerm_nat_gateway.example.id
 }
 
