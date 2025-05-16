@@ -44,3 +44,24 @@
     -variables.tf do not provide any default values
 
 
+## Common Azure Resources Deployed with Terraform for Azure OpenAI
+# Core Azure OpenAI Resources
+  1. azurerm_cognitive_account
+  2. azurerm_cognitive_deployment
+# Supporting Azure Resources
+  1. azurerm_resource_group
+  2. azurerm_virtual_network
+  3. azurerm_subnet
+  4. azurerm_private_endpoint
+  5. azurerm_key_vault
+  6. azurerm_storage_account
+  7. azurerm_monitor_diagnostic_setting
+  8. azurerm_kubernetes_cluster
+  9. azurerm_application_gateway
+ 10. azurerm_log_analytics_workspace
+ 11. azurerm_role_assignment
+ 12. azurerm_user_assigned_identity
+ 13. azurerm_network_interface
+ 14. azurerm_network_security_group
+ 15. azurerm_public_ip
+ 16. azurerm_dns_zone
