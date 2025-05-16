@@ -9,7 +9,7 @@ resource "random_id" "rg_name" {
 
 resource "azurerm_resource_group" "my-rg" {
   location    = var.location
-  name        = "dev-${random_id.rg_name.hex}-rg"
+  name        = "tst-${random_id.rg_name.hex}-rg"
 }
 
 resource "azurerm_virtual_network" "vent" {
