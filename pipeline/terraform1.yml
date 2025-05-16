@@ -1,0 +1,53 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  ARM_CLIENT_ID: $(servicePrincipalId)
+  ARM_CLIENT_SECRET: $(servicePrincipalKey)
+  ARM_SUBSCRIPTION_ID: $(subscriptionId)
+  ARM_TENANT_ID: $(tenantId)
+
+stages:
+- stage: DeployVMSS
+  jobs:
+  - job: terraform
+    steps:
+
+    - task: UseTerraform@1
+      inputs:
+        terraformVersion: 'latest'
+
+    - script: |
+        terraform init
+        terraform apply -auto-approve
+      displayName: 'Terraform Apply'
+
+- stage: ConfigureVMSS
+  dependsOn: DeployVMSS
+  jobs:
+  - job: RunCommand
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '<your-azure-service-connection>'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          # Get the instance ID
+          instance_id=$(az vmss list-instances \
+            --resource-group example-resources \
+            --name example-vmss \
+            --query "[0].instanceId" -o tsv)
+
+          # Run a command on the VMSS instance (e.g., install nginx)
+          az vmss run-command invoke \
+            --resource-group example-resources \
+            --name example-vmss \
+            --instance-id $instance_id \
+            --command-id RunShellScript \
+            --scripts "sudo apt update && sudo apt install -y nginx"
+
+      displayName: 'Run command on VMSS instance'
