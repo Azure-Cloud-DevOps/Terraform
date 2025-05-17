@@ -12,6 +12,10 @@ variable "location" {
  # type = string
 #}
 
+variable "environment" {
+  type = string
+}
+
 # Generate random suffix
 resource "random_string" "storage_suffix" {
   length  = 6
