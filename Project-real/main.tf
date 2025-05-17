@@ -50,7 +50,7 @@ module "vmss" {
 
 module "storage_account" {
   source              = "./modules/storage_account"
-  storage_account_name = var.storage_account_name
+  storage_account_name = local.storage_account_name
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   account_tier        = "Standard"
