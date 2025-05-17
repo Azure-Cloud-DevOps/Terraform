@@ -7,3 +7,12 @@ locals {
     vm5 = { name = "vm5", subnet_key = "db" }
   }
 }
+
+locals {
+  common_tags = {
+    environment = var.environment
+    owner       = "devops-team"
+    project     = "aks-deployment"
+  }
+}
+
