@@ -25,8 +25,7 @@ resource "random_string" "storage_suffix" {
   special = false
 }
 
-# Compose storage account name
-locals {
-  storage_account_name = lower("${var.prefix}${random_string.storage_suffix.result}")
-}
 
+variable "kubernetes_version" {
+  default = "1.29.2"
+}
