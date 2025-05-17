@@ -83,3 +83,20 @@ module "aks_cluster" {
   source              = "./modules/aks_cluster"
   tags                = local.common_tags
 }
+
+module "webapp" {
+  source                 = "./modules/webapp"
+# count = var.environment == "prod" ? 1 : 0
+# count = var.environment == "prod" || var.environment == "staging" ? 1 : 0
+  resource_group_name    = module.resource_group.name
+  location               = module.resource_group.name.location
+  app_service_plan_name  = "myAppServicePlan-${var.environment}"
+  webapp_name            = "myUniqueWebAppName-${var.environment}"  # must be globally unique
+  sku_tier               = "Basic"
+  sku_size               = "B1"
+  dotnet_version         = "v6.0"
+  app_settings           = {
+    "WEBSITE_RUN_FROM_PACKAGE" = "1"
+    "ENVIRONMENT" = var.environment
+  }
+}
