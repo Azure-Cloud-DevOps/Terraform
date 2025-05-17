@@ -6,8 +6,8 @@ module "resource_group" {
 
 module "vnet" {
   source = "./modules/vnet" 
-  resource_group     = "my-rg"
-  location           = "East US"
+  resource_group     = module.resource_group.name
+  location           = module.resource_group.location
   vnet_name          = "my-vnet"
   address_space      = "10.0.0.0/16"
 
