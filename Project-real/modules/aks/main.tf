@@ -9,7 +9,8 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   location              = var.location
   resource_group_name   = var.resource_group_name
   dns_prefix            = "${var.environment}-${var.resource_group_name}-cluster"           
-  kubernetes_version    =  data.azurerm_kubernetes_service_versions.current.latest_version
+# kubernetes_version    =  data.azurerm_kubernetes_service_versions.current.latest_version
+  kubernetes_version    = var.kubernetes_version != "" ? var.kubernetes_version : data.azurerm_kubernetes_service_versions.current.latest_version
   node_resource_group = "${var.environment}-${var.resource_group_name}-nrg"
   
   default_node_pool {
