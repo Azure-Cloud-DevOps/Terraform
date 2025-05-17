@@ -60,3 +60,22 @@ module "storage_account" {
     environment = "dev"
   }
 }
+
+module "vms" {
+  for_each = local.vm_list
+
+  source              = "./modules/virtual_machine"
+  vm_name             = "${var.environment}-${each.value.name}"
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  subnet_id           = module.network.subnet_ids[each.value.subnet_key]
+  vm_size             = var.vm_size
+  admin_username      = var.admin_username
+  ssh_public_key      = var.ssh_public_key
+
+  tags = {
+    environment = var.environment
+    role        = each.value.name
+  }
+}
+
