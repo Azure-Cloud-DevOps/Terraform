@@ -1,3 +1,8 @@
+# Compose storage account name
+locals {
+  storage_account_name = lower("${var.prefix}${random_string.storage_suffix.result}")
+}
+
 locals {
   vm_list = {
     vm1 = { name = "vm1", subnet_key = "web" }
