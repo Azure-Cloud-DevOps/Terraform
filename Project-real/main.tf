@@ -47,3 +47,16 @@ module "vmss" {
   subnet_id           = module.network.subnet_ids["<your_subnet_key>"]  
   backend_pool_id     = module.load_balancer.backend_pool_id
 }
+
+module "storage_account" {
+  source              = "./modules/storage_account"
+  storage_account_name = var.storage_account_name
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  account_tier        = "Standard"
+  account_replication_type = "LRS"
+  kind                = "StorageV2"
+  tags                = {
+    environment = "dev"
+  }
+}
