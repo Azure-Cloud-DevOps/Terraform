@@ -3,9 +3,13 @@
 # location    = var.location
 #}
 
-module "vnet" {
-  source = "./modules/vnet"  # Path to your module
+module "resource_group" {
+  source   = "./modules/resource_group"
+  location = var.location
+}
 
+module "vnet" {
+  source = "./modules/vnet" 
   resource_group     = "my-rg"
   location           = "East US"
   vnet_name          = "my-vnet"
@@ -27,3 +31,23 @@ module "vnet" {
 }
 
 
+module "load_balancer" {
+  source              = "./modules/load_balancer"
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  lb_name             = var.lb_name
+  zones               = var.zones
+}
+
+module "vmss" {
+  source              = "./modules/vmss"
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  vmss_name           = var.vmss_name
+  vm_size             = var.vm_size
+  instance_count      = var.instance_count
+  admin_username      = var.admin_username
+  ssh_public_key      = var.ssh_public_key
+  subnet_id           = module.network.subnet_ids["<your_subnet_key>"]  
+  backend_pool_id     = module.load_balancer.backend_pool_id
+}
