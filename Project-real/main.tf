@@ -79,3 +79,7 @@ module "vms" {
   }
 }
 
+module "aks_cluster" {
+  source              = "./modules/aks_cluster"
+  tags                = local.common_tags
+}
