@@ -1,7 +1,7 @@
 # 🏗️ Challenges When Creating Azure Infrastructure Using Terraform – with Code
 # 1. Resource Dependency Management
-Scenario: VM created before subnet was ready.
-Code Example:
+     - Scenario: VM created before subnet was ready.
+     - Code Example:
         resource "azurerm_virtual_network" "vnet" {
           name                = "my-vnet"
           address_space       = ["10.0.0.0/16"]
@@ -56,7 +56,7 @@ Code Example:
         }
 
 # 2. State File Management:
-Code Example – backend block in main.tf:
+     - Code Example – backend block in main.tf:
         terraform {
           backend "azurerm" {
             resource_group_name  = "tfstate-rg"
@@ -66,7 +66,7 @@ Code Example – backend block in main.tf:
           }
         }
   # 3. Handling Secrets Securely
-  client_secret = "hardcoded_secret"
+       - client_secret = "hardcoded_secret"
         
         data "azurerm_key_vault" "kv" {
           name                = "my-keyvault"
@@ -150,8 +150,8 @@ Code Example – backend block in main.tf:
           steps:
             - script: terraform apply -auto-approve
             
-  terraform apply -target=module.network
-  terraform apply -target=module.vm
+ >> terraform apply -target=module.network
+ >> terraform apply -target=module.vm
 *********************************************************************************
 
 
