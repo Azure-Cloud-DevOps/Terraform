@@ -1,4 +1,4 @@
-# local-exe:
+# local-exec:
     resource "null_resource" "invoke_openai" {
       provisioner "local-exec" {
         command = <<EOT
