@@ -66,7 +66,7 @@
  15. azurerm_public_ip
  16. azurerm_dns_zone
 
-# Folder Strucutre
+# Folder Structure
       azure-terraform-project/
       ├── modules/                        # Reusable child modules
       │   ├── resource_group/             # Child module for Azure Resource Groups
