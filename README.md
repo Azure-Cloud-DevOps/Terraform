@@ -65,3 +65,44 @@
  14. azurerm_network_security_group
  15. azurerm_public_ip
  16. azurerm_dns_zone
+
+# Folder Strucutre
+      azure-terraform-project/
+      ├── modules/                        # Reusable child modules
+      │   ├── resource_group/             # Child module for Azure Resource Groups
+      │   │   ├── main.tf
+      │   │   ├── variables.tf
+      │   │   ├── outputs.tf
+      │   │   └── README.md
+      │   ├── virtual_network/            # Child module for Azure Virtual Networks
+      │   │   ├── main.tf
+      │   │   ├── variables.tf
+      │   │   ├── outputs.tf
+      │   │   └── README.md
+      │   ├── network_security_group/     # Child module for NSGs
+      │   │   ├── main.tf
+      │   │   ├── variables.tf
+      │   │   ├── outputs.tf
+      │   │   └── README.md
+      │   └── ...
+      ├── environments/                   # Root modules for different environments
+      │   ├── dev/                        # Root module for Development environment
+      │   │   ├── main.tf
+      │   │   ├── variables.tf
+      │   │   ├── terraform.tfvars
+      │   │   └── backend.tf
+      │   ├── staging/                    # Root module for Staging environment
+      │   │   ├── main.tf
+      │   │   ├── variables.tf
+      │   │   ├── terraform.tfvars
+      │   │   └── backend.tf
+      │   └── prod/                       # Root module for Production environment
+      │       ├── main.tf
+      │       ├── variables.tf
+      │       ├── terraform.tfvars
+      │       └── backend.tf
+      ├── scripts/                        # Helper scripts
+      │   └── deploy.sh
+      ├── .gitignore
+      └── README.md
+
