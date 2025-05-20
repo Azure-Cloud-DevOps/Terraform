@@ -1,0 +1,70 @@
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  terraformVersion: '1.5.7'
+  azureServiceConnection: 'AzureSP'
+  backendResourceGroup: 'tfstate-rg'
+  backendStorageAccount: 'tfstateaccount'
+  backendContainer: 'tfstate'
+  backendKey: 'terraform.tfstate'
+
+stages:
+  - stage: Init
+    jobs:
+      - job: TerraformInit
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: $(terraformVersion)
+
+          - task: TerraformCLI@0
+            inputs:
+              command: 'init'
+              backendType: 'azurerm'
+              backendServiceArm: $(azureServiceConnection)
+              ensureBackend: true
+              backendAzureRmResourceGroupName: $(backendResourceGroup)
+              backendAzureRmStorageAccountName: $(backendStorageAccount)
+              backendAzureRmContainerName: $(backendContainer)
+              backendAzureRmKey: $(backendKey)
+
+  - stage: Plan
+    dependsOn: Init
+    jobs:
+      - job: TerraformPlan
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: TerraformCLI@0
+            inputs:
+              command: 'plan'
+              environmentServiceNameAzureRM: $(azureServiceConnection)
+              publishPlanResults: true
+              planOutputFile: 'tfplan'
+
+          - publish: tfplan
+            artifact: terraformPlan
+
+  - stage: Apply
+    dependsOn: Plan
+    condition: succeeded()
+    jobs:
+      - deployment: TerraformApply
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: terraformPlan
+
+                - task: TerraformCLI@0
+                  inputs:
+                    command: 'apply'
+                    environmentServiceNameAzureRM: $(azureServiceConnection)
+                    commandOptions: 'tfplan'
