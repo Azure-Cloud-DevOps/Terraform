@@ -18,7 +18,8 @@ variables:
 
 pool:
   name: agentnew
-  
+
+stages:
 - task: UseAzureCLI@1
   inputs:
     versionSpec: '2.x'
