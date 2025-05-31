@@ -1,74 +1,25 @@
 trigger:
 - main
 
-variables:
-  AZ_RESOURCE_GROUP: 'testnew'
-  AZ_VM_NAME: 'MyVM'
-  AZ_IMAGE: 'UbuntuLTS'
-  AZ_LOCATION: 'East US'
-  AZ_SIZE: 'Standard_DS2_v2'
-  AZ_USER: 'azureuser'
-  AZ_SSH_KEY: '/path/to/your/ssh/key.pub'
-  AZ_NSG: 'MyNSG'
-
 pool:
   name: agentnew
 
 stages:
-- stage: CreateVM
-  displayName: 'Create Azure VM'
+- stage: CreateSPN
+  displayName: 'Create Azure SPN'
   jobs:
-  - job: CreateVMJob
-    displayName: 'VM Creation Job'
-    pool:
-      name: agentnew
-    steps:
-    - task: AzureCLI@2
+  - job: CreateSPNJob
+    displayName: 'SPN Creation Job'
+    steps:                              # <-- must have 'steps' here
+    - task: AzureCLI@2                 # <-- specify the task name
       inputs:
-        azureSubscription: 'mynewserviceconnection'
+        azureSubscription: 'mynewserviceconnection'   # your service connection
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az vm create \
-            --resource-group $(AZ_RESOURCE_GROUP) \
-            --name $(AZ_VM_NAME) \
-            --image $(AZ_IMAGE) \
-            --location "$(AZ_LOCATION)" \
-            --size $(AZ_SIZE) \
-            --admin-username $(AZ_USER) \
-            --ssh-key-value $(AZ_SSH_KEY) \
-            --nsg $(AZ_NSG)
-        displayName: 'Create Azure VM'
-
-
-# - stage: DeleteVM
-#   displayName: 'Delete Azure VM and Resources'
-#   jobs:
-#   - job: DeleteVMJob
-#     displayName: 'VM Deletion Job'
-#     pool:
-#       name: agentnew
-#     steps:
-#     - task: AzureCLI@2
-#       inputs:
-#         azureSubscription: 'mynewserviceconnection'
-#         scriptType: 'bash'
-#         scriptLocation: 'inlineScript'
-#         inlineScript: |
-#           az vm delete \
-#             --resource-group $(AZ_RESOURCE_GROUP) \
-#             --name $(AZ_VM_NAME) \
-#             --yes \
-#             --no-wait
-#           az network nic delete \
-#             --resource-group $(AZ_RESOURCE_GROUP) \
-#             --name $(AZ_VM_NAME)VMNic
-#           az disk delete \
-#             --resource-group $(AZ_RESOURCE_GROUP) \
-#             --name $(AZ_VM_NAME)OSDisk \
-#             --yes \
-#             --no-wait
-#           az network public-ip delete \
-#             --resource-group $(AZ_RESOURCE_GROUP) \
-#             --name $(AZ_VM_NAME)PublicIP
-#       displayName: 'Delete Azure VM and Resources'
+          echo "Creating Service Principal..."
+          SPN_NAME="http://spn-from-pipeline-$(Build.BuildId)"
+          az ad sp create-for-rbac --name $SPN_NAME --role contributor --scopes /subscriptions/$(AZURE_SUBSCRIPTION_ID) --sdk-auth > spn.json
+          echo "SPN JSON output:"
+          cat spn.json
+      displayName: 'Create Service Principal using Azure CLI'
