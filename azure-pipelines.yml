@@ -23,9 +23,6 @@ stages:
     pool:
       name: agentnew
     steps:
-    - task: UseAzureCLI@1
-      inputs:
-        versionSpec: '2.x'
     - task: AzureCLI@2
       inputs:
         azureSubscription: 'mynewserviceconnection'
