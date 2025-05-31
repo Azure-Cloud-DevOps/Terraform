@@ -38,7 +38,7 @@ stages:
             --admin-username $(AZ_USER) \
             --ssh-key-value $(AZ_SSH_KEY) \
             --nsg $(AZ_NSG)
-  displayName: 'Create Azure VM'
+        displayName: 'Create Azure VM'
 
 
 # - stage: DeleteVM
