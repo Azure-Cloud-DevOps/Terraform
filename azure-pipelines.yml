@@ -33,41 +33,42 @@ stages:
             --resource-group $(AZ_RESOURCE_GROUP) \
             --name $(AZ_VM_NAME) \
             --image $(AZ_IMAGE) \
-            --location $(AZ_LOCATION) \
+            --location "$(AZ_LOCATION)" \
             --size $(AZ_SIZE) \
             --admin-username $(AZ_USER) \
             --ssh-key-value $(AZ_SSH_KEY) \
             --nsg $(AZ_NSG)
-      displayName: 'Create Azure VM'
+  displayName: 'Create Azure VM'
 
-- stage: DeleteVM
-  displayName: 'Delete Azure VM and Resources'
-  jobs:
-  - job: DeleteVMJob
-    displayName: 'VM Deletion Job'
-    pool:
-      name: agentnew
-    steps:
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'mynewserviceconnection'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az vm delete \
-            --resource-group $(AZ_RESOURCE_GROUP) \
-            --name $(AZ_VM_NAME) \
-            --yes \
-            --no-wait
-          az network nic delete \
-            --resource-group $(AZ_RESOURCE_GROUP) \
-            --name $(AZ_VM_NAME)VMNic
-          az disk delete \
-            --resource-group $(AZ_RESOURCE_GROUP) \
-            --name $(AZ_VM_NAME)OSDisk \
-            --yes \
-            --no-wait
-          az network public-ip delete \
-            --resource-group $(AZ_RESOURCE_GROUP) \
-            --name $(AZ_VM_NAME)PublicIP
-      displayName: 'Delete Azure VM and Resources'
+
+# - stage: DeleteVM
+#   displayName: 'Delete Azure VM and Resources'
+#   jobs:
+#   - job: DeleteVMJob
+#     displayName: 'VM Deletion Job'
+#     pool:
+#       name: agentnew
+#     steps:
+#     - task: AzureCLI@2
+#       inputs:
+#         azureSubscription: 'mynewserviceconnection'
+#         scriptType: 'bash'
+#         scriptLocation: 'inlineScript'
+#         inlineScript: |
+#           az vm delete \
+#             --resource-group $(AZ_RESOURCE_GROUP) \
+#             --name $(AZ_VM_NAME) \
+#             --yes \
+#             --no-wait
+#           az network nic delete \
+#             --resource-group $(AZ_RESOURCE_GROUP) \
+#             --name $(AZ_VM_NAME)VMNic
+#           az disk delete \
+#             --resource-group $(AZ_RESOURCE_GROUP) \
+#             --name $(AZ_VM_NAME)OSDisk \
+#             --yes \
+#             --no-wait
+#           az network public-ip delete \
+#             --resource-group $(AZ_RESOURCE_GROUP) \
+#             --name $(AZ_VM_NAME)PublicIP
+#       displayName: 'Delete Azure VM and Resources'
